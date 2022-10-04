@@ -8,3 +8,5 @@ lipo -create -output $DST_DIR/libskia.a out/macOS_Debug/libskia.a out/macOS_arm6
 lipo -create -output $DST_DIR/libskparagraph.a out/macOS_Debug/libskparagraph.a out/macOS_arm64_Debug/libskparagraph.a
 lipo -create -output $DST_DIR/libskresources.a out/macOS_Debug/libskresources.a out/macOS_arm64_Debug/libskresources.a
 lipo -create -output $DST_DIR/libskshaper.a out/macOS_Debug/libskshaper.a out/macOS_arm64_Debug/libskshaper.a
+lipo -create -output $DST_DIR/libskunicode.a out/macOS_Debug/libskunicode.a out/macOS_arm64_Debug/libskunicode.a
+lipo -create -output $DST_DIR/libsktext.a out/macOS_Debug/libsktext.a out/macOS_arm64_Debug/libsktext.a
