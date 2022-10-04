@@ -125,6 +125,7 @@ public:
     }
 };
 
+
 void SkBidiIterator::ReorderVisual(const Level runLevels[], int levelsCount,
                                    int32_t logicalFromVisual[]) {
     sk_ubidi_reorderVisual(runLevels, levelsCount, logicalFromVisual);

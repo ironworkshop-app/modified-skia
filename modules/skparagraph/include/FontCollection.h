@@ -23,6 +23,9 @@ public:
 
     size_t getFontManagersCount() const;
 
+    void addRuntimeFontManager(sk_sp<SkFontMgr> fontManager);
+    void removeRuntimeFontManager(sk_sp<SkFontMgr> fontManager);
+
     void setAssetFontManager(sk_sp<SkFontMgr> fontManager);
     void setDynamicFontManager(sk_sp<SkFontMgr> fontManager);
     void setTestFontManager(sk_sp<SkFontMgr> fontManager);
@@ -71,6 +74,7 @@ private:
     bool fEnableFontFallback;
     SkTHashMap<FamilyKey, std::vector<sk_sp<SkTypeface>>, FamilyKey::Hasher> fTypefaces;
     sk_sp<SkFontMgr> fDefaultFontManager;
+    std::vector<sk_sp<SkFontMgr>> fRuntimeFontManagers;
     sk_sp<SkFontMgr> fAssetFontManager;
     sk_sp<SkFontMgr> fDynamicFontManager;
     sk_sp<SkFontMgr> fTestFontManager;
