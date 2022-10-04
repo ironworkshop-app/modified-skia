@@ -86,7 +86,7 @@ GrMtlGpu::GrMtlGpu(GrDirectContext* direct, const GrContextOptions& options,
 #if GR_METAL_CAPTURE_COMMANDBUFFER
     this->testingOnly_startCapture();
 #endif
-    fCurrentCmdBuffer = GrMtlCommandBuffer::Make(fQueue);
+    
 #if GR_METAL_SDK_VERSION >= 230
     if (@available(macOS 11.0, iOS 14.0, *)) {
         fBinaryArchive = (__bridge id<MTLBinaryArchive>)(binaryArchive);

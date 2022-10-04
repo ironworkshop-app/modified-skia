@@ -30,6 +30,8 @@ GR_NORETAIN_BEGIN
 class GrMtlCommandBuffer : public SkRefCnt {
 public:
     static sk_sp<GrMtlCommandBuffer> Make(id<MTLCommandQueue> queue);
+    static sk_sp<GrMtlCommandBuffer> Make(id<MTLCommandBuffer> buffer, bool external);
+
     ~GrMtlCommandBuffer() override;
 
     void releaseResources();
@@ -98,7 +100,16 @@ private:
         , fActiveBlitCommandEncoder(nil)
         , fActiveRenderCommandEncoder(nil)
         , fPreviousRenderPassDescriptor(nil)
-        , fHasWork(false) {}
+        , fHasWork(false)
+        , fExternalBuffer(false) {}
+
+    GrMtlCommandBuffer(id<MTLCommandBuffer> cmdBuffer, bool externalBuffer)
+        : fCmdBuffer(cmdBuffer)
+        , fActiveBlitCommandEncoder(nil)
+        , fActiveRenderCommandEncoder(nil)
+        , fPreviousRenderPassDescriptor(nil)
+        , fHasWork(false)
+        , fExternalBuffer(externalBuffer) {}
 
     void endAllEncoding();
 
@@ -113,6 +124,7 @@ private:
     std::unique_ptr<GrMtlRenderCommandEncoder> fActiveRenderCommandEncoder;
     MTLRenderPassDescriptor*    fPreviousRenderPassDescriptor;
     bool                        fHasWork;
+    bool                        fExternalBuffer;
 
     SkTArray<sk_sp<skgpu::RefCntedCallback>> fFinishedCallbacks;
 

@@ -38,6 +38,18 @@ sk_sp<GrMtlCommandBuffer> GrMtlCommandBuffer::Make(id<MTLCommandQueue> queue) {
     return sk_sp<GrMtlCommandBuffer>(new GrMtlCommandBuffer(mtlCommandBuffer));
 }
 
+sk_sp<GrMtlCommandBuffer> GrMtlCommandBuffer::Make(id<MTLCommandBuffer> mtlCommandBuffer, bool external) {
+    if (nil == mtlCommandBuffer) {
+        return nullptr;
+    }
+
+#ifdef SK_ENABLE_MTL_DEBUG_INFO
+    mtlCommandBuffer.label = @"GrMtlCommandBuffer::Make";
+#endif
+
+    return sk_sp<GrMtlCommandBuffer>(new GrMtlCommandBuffer(mtlCommandBuffer, external));
+}
+
 GrMtlCommandBuffer::~GrMtlCommandBuffer() {
     this->endAllEncoding();
     this->releaseResources();
@@ -187,32 +199,37 @@ GrMtlRenderCommandEncoder* GrMtlCommandBuffer::getRenderCommandEncoder(
 
 bool GrMtlCommandBuffer::commit(bool waitUntilCompleted) {
     this->endAllEncoding();
-    if (fCmdBuffer.status != MTLCommandBufferStatusNotEnqueued) {
-        NSLog(@"GrMtlCommandBuffer: Tried to commit command buffer while in invalid state.\n");
-        return false;
-    }
+
+    if (!fExternalBuffer) {
+        if (fCmdBuffer.status != MTLCommandBufferStatusNotEnqueued) {
+            NSLog(@"GrMtlCommandBuffer: Tried to commit command buffer while in invalid state.\n");
+            return false;
+        }
 #ifdef SK_BUILD_FOR_IOS
-    if (GrMtlIsAppInBackground()) {
-        NSLog(@"GrMtlCommandBuffer: Tried to commit command buffer while in background.\n");
+        if (GrMtlIsAppInBackground()) {
+            NSLog(@"GrMtlCommandBuffer: Tried to commit command buffer while in background.\n");
+            return false;
+        }
+#endif
+        [fCmdBuffer commit];
+        if (waitUntilCompleted) {
+            this->waitUntilCompleted();
+        }
+
+        if (fCmdBuffer.status == MTLCommandBufferStatusError) {
+#ifdef SK_DEBUG
+            NSString* description = [[fCmdBuffer error] localizedDescription];
+            const char* errorString = [description UTF8String];
+            SkDebugf("Error submitting command buffer: %s\n", errorString);
+#else
+            SkDebugf("Error submitting command buffer\n");
+#endif
+        }
+
+        return (fCmdBuffer.status != MTLCommandBufferStatusError);
+    } else {
         return false;
     }
-#endif
-    [fCmdBuffer commit];
-    if (waitUntilCompleted) {
-        this->waitUntilCompleted();
-    }
-
-    if (fCmdBuffer.status == MTLCommandBufferStatusError) {
-#ifdef SK_DEBUG
-        NSString* description = [[fCmdBuffer error] localizedDescription];
-        const char* errorString = [description UTF8String];
-        SkDebugf("Error submitting command buffer: %s\n", errorString);
-#else
-        SkDebugf("Error submitting command buffer\n");
-#endif
-    }
-
-    return (fCmdBuffer.status != MTLCommandBufferStatusError);
 }
 
 void GrMtlCommandBuffer::endAllEncoding() {
