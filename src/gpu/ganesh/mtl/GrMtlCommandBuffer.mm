@@ -228,7 +228,7 @@ bool GrMtlCommandBuffer::commit(bool waitUntilCompleted) {
 
         return (fCmdBuffer.status != MTLCommandBufferStatusError);
     } else {
-        return false;
+        return true;
     }
 }
 

@@ -44,7 +44,7 @@ GR_NORETAIN_BEGIN
 
 sk_sp<GrGpu> GrMtlGpu::Make(const GrMtlBackendContext& context, const GrContextOptions& options,
                             GrDirectContext* direct) {
-    if (!context.fDevice || !context.fQueue) {
+    if (!context.fDevice) {
         return nullptr;
     }
     if (@available(macOS 10.14, iOS 10.0, *)) {
@@ -60,9 +60,12 @@ sk_sp<GrGpu> GrMtlGpu::Make(const GrMtlBackendContext& context, const GrContextO
     }
 
     id<MTLDevice> GR_NORETAIN device = (__bridge id<MTLDevice>)(context.fDevice.get());
-    id<MTLCommandQueue> GR_NORETAIN queue = (__bridge id<MTLCommandQueue>)(context.fQueue.get());
-
-    return sk_sp<GrGpu>(new GrMtlGpu(direct, options, device, queue, context.fBinaryArchive.get()));
+    if (context.fCommandBufferGetter) {
+        return sk_sp<GrGpu>(new GrMtlGpu(direct, options, device, nil, context.fBinaryArchive.get(), context.fCommandBufferGetter));
+    } else {
+        id<MTLCommandQueue> GR_NORETAIN queue = (__bridge id<MTLCommandQueue>)(context.fQueue.get());
+        return sk_sp<GrGpu>(new GrMtlGpu(direct, options, device, queue, context.fBinaryArchive.get(), context.fCommandBufferGetter));
+    }
 }
 
 // This constant determines how many OutstandingCommandBuffers are allocated together as a block in
@@ -72,10 +75,12 @@ sk_sp<GrGpu> GrMtlGpu::Make(const GrMtlBackendContext& context, const GrContextO
 static const int kDefaultOutstandingAllocCnt = 8;
 
 GrMtlGpu::GrMtlGpu(GrDirectContext* direct, const GrContextOptions& options,
-                   id<MTLDevice> device, id<MTLCommandQueue> queue, GrMTLHandle binaryArchive)
+                   id<MTLDevice> device, id<MTLCommandQueue> queue, GrMTLHandle binaryArchive,
+                   std::function<GrMTLHandle()> commandBufferGetter)
         : INHERITED(direct)
         , fDevice(device)
         , fQueue(queue)
+        , fCommdBufferGetter(commandBufferGetter)
         , fOutstandingCommandBuffers(sizeof(OutstandingCommandBuffer), kDefaultOutstandingAllocCnt)
         , fResourceProvider(this)
         , fStagingBufferManager(this)
@@ -180,7 +185,14 @@ GrMtlCommandBuffer* GrMtlGpu::commandBuffer() {
         this->testingOnly_startCapture();
 #endif
         // Create a new command buffer for the next submit
-        fCurrentCmdBuffer = GrMtlCommandBuffer::Make(fQueue);
+        if (fCommdBufferGetter) {
+            id<MTLCommandBuffer> GR_NORETAIN mtlCommandBuffer = (__bridge id<MTLCommandBuffer>)fCommdBufferGetter();
+            fCurrentCmdBuffer = GrMtlCommandBuffer::Make(mtlCommandBuffer, true);
+        }
+
+        if (!fCurrentCmdBuffer) {
+            fCurrentCmdBuffer = GrMtlCommandBuffer::Make(fQueue);
+        }
     }
 
     SkASSERT(fCurrentCmdBuffer);

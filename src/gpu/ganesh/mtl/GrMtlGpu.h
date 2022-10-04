@@ -127,7 +127,8 @@ public:
 
 private:
     GrMtlGpu(GrDirectContext*, const GrContextOptions&, id<MTLDevice>,
-             id<MTLCommandQueue>, GrMTLHandle binaryArchive);
+             id<MTLCommandQueue>, GrMTLHandle binaryArchive,
+             std::function<GrMTLHandle()>);
 
     void destroyResources();
 
@@ -300,6 +301,8 @@ private:
 
     id<MTLDevice> fDevice;
     id<MTLCommandQueue> fQueue;
+
+    std::function<GrMTLHandle()> fCommdBufferGetter;
 
     sk_sp<GrMtlCommandBuffer> fCurrentCmdBuffer;
 
