@@ -59,9 +59,21 @@ void FontCollection::setDefaultFontManager(sk_sp<SkFontMgr> fontManager) {
     fDefaultFontManager = fontManager;
 }
 
+void FontCollection::addRuntimeFontManager(sk_sp<SkFontMgr> fontManager) {
+    fRuntimeFontManagers.push_back(fontManager);
+}
+
+void FontCollection::removeRuntimeFontManager(sk_sp<SkFontMgr> fontManager) {
+    auto it = find(fRuntimeFontManagers.begin(), fRuntimeFontManagers.end(), fontManager);
+    if (it != fRuntimeFontManagers.end()) {
+        fRuntimeFontManagers.erase(it);
+    }
+}
+
 // Return the available font managers in the order they should be queried.
 std::vector<sk_sp<SkFontMgr>> FontCollection::getFontManagerOrder() const {
     std::vector<sk_sp<SkFontMgr>> order;
+    order.insert(order.end(), fRuntimeFontManagers.begin(), fRuntimeFontManagers.end());
     if (fDynamicFontManager) {
         order.push_back(fDynamicFontManager);
     }
