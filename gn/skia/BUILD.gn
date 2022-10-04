@@ -253,6 +253,12 @@ config("default") {
     #     Falling back to library file for linking.
     ldflags += [ "-Wl,-w" ]
 
+    if (macos_min_target != "") {
+      cflags += [ "-mmacosx-version-min=$macos_min_target" ]
+      asmflags += [ "-mmacosx-version-min=$macos_min_target" ]
+      ldflags += [ "-mmacosx-version-min=$macos_min_target" ]
+    }
+
     # As of 11/2020, gn is an x86 binary and defaults the host_cpu to x86_64.
     # This allows you to build arm64 mac binaries by setting target_cpu = "arm64"
     if (current_cpu == "arm64") {

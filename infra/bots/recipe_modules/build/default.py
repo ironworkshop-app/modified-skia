@@ -122,7 +122,7 @@ def compile_fn(api, checkout_root, out_dir):
         args['ios_min_target'] = '"11.0"'
       else:
         # We have some bots on 10.13.
-        env['MACOSX_DEPLOYMENT_TARGET'] = '10.13'
+        env['MACOSX_DEPLOYMENT_TARGET'] = '11.0'
 
   if 'CheckGeneratedFiles' in extra_tokens:
     compiler = 'Clang'
