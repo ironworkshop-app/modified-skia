@@ -25,14 +25,14 @@ Write-Output "OUTPUT_DIR:$OUTPUT_DIR"
     skia_enable_skottie = false 
     skia_enable_pdf = false 
     skia_use_piex = false 
+    skia_use_expat = false
     skia_use_metal = false
     skia_use_direct3d = true 
     skia_enable_tools = false
-    skia_use_expat = false
-    target_cpu = \"x64\"
     paragraph_tests_enabled = false 
     paragraph_gms_enabled = false 
-    paragraph_bench_enabled = false 
+    paragraph_bench_enabled = false
+    target_cpu = \"x64\" 
     cc = \"clang\"
     cxx = \"clang++\"
     clang_win = \"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\Llvm\"
