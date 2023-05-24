@@ -2,8 +2,8 @@
 $DIR = $PSScriptRoot
 $SRC_DIR = "$DIR\..\.."
 $GN = "$SRC_DIR\bin\gn.exe"
-$OUTPUT_DIR = "$SRC_DIR\out\Windows_Debug"
-$SKIA_DIR = "$env:DEVENV\aiSDK\prebuilt\Windows\Debug\skia"
+$OUTPUT_DIR = "$SRC_DIR\out\Windows_x64_Debug"
+$SKIA_DIR = "$env:DEVENV\aiSDK\prebuilt\Windows_x64_Debug\skia"
 
 mkdir -Force $OUTPUT_DIR | Out-Null
 
@@ -40,7 +40,7 @@ Write-Output "OUTPUT_DIR:$OUTPUT_DIR"
 
 ninja -C $OUTPUT_DIR
 
-robocopy /xc /xn /xo "$OUTPUT_DIR" "$env:DEVENV\aiSDK\prebuilt\Windows\Debug\lib" *.lib
+robocopy /xc /xn /xo "$OUTPUT_DIR" "$env:DEVENV\aiSDK\prebuilt\Windows_x64_Debug\lib" *.lib
 robocopy /xc /xn /xo /MIR "$SRC_DIR\include" "$SKIA_DIR\include" *.h
 robocopy /xc /xn /xo /MIR "$SRC_DIR\src\base" "$SKIA_DIR\src\base" *.h
 robocopy /xc /xn /xo /MIR "$SRC_DIR\src\core" "$SKIA_DIR\src\core" *.h
