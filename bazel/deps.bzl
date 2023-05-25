@@ -197,6 +197,6 @@ def git_repos_from_deps(ws = "@"):
     new_git_repository(
         name = "zlib_skia",
         build_file = ws + "//bazel/external/zlib_skia:BUILD.bazel",
-        commit = "04f42ceca40f73e2978b50e93806c2a18c1281fc",
-        remote = "https://github.com/madler/zlib.git",
+        commit = "c876c8f87101c5a75f6014b0f832499afeb65b73",
+        remote = "https://chromium.googlesource.com/chromium/src/third_party/zlib",
     )
