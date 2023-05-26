@@ -39,7 +39,12 @@ clang_win = "/Users/luoweibin/DevEnv/emsdk"
 ninja -C out/Web_wasm32_Debug
 
 mkdir -p $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/lib
-rsync -r --include="*/" --include="*.a" --exclude="*" $OUTPUT_DIR $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/lib
+cp $OUTPUT_DIR/*.a $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/lib
+mv $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/lib/libzlib.a $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/lib/libz.a
+
+mkdir -p $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/include
+cp $OUTPUT_DIR/../../third_party/externals/zlib/zlib.h $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/include/zlib.h
+cp $OUTPUT_DIR/../../third_party/externals/zlib/zconf.h $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/include/zconf.h
 
 mkdir -p $SKIA_DIR/include
 rsync -r --include="*/" --include="*.h" --exclude="*" $SRC_DIR/include $SKIA_DIR
