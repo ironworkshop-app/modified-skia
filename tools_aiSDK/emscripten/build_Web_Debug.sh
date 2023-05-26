@@ -3,7 +3,10 @@ DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 SRC_DIR=$DIR/../..
 GN=$SRC_DIR/bin/gn
 OUTPUT_DIR=$SRC_DIR/out/Web_wasm32_Debug
-SKIA_DIR=$DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/skia
+DEST_DIR=$DEVENV/aiSDK/prebuilt/Web_wasm32_Debug
+DEST_INCLUDE_DIR=$DEST_DIR/include
+SKIA_DIR=$DEST_DIR/extra/skia
+THIRD_PARTY=$OUTPUT_DIR/../../third_party
 
 mkdir -p $OUTPUT_DIR
 
@@ -38,13 +41,9 @@ clang_win = "/Users/luoweibin/DevEnv/emsdk"
 
 ninja -C out/Web_wasm32_Debug
 
-mkdir -p $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/lib
-cp $OUTPUT_DIR/*.a $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/lib
-mv $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/lib/libzlib.a $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/lib/libz.a
-
-mkdir -p $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/include
-cp $OUTPUT_DIR/../../third_party/externals/zlib/zlib.h $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/include/zlib.h
-cp $OUTPUT_DIR/../../third_party/externals/zlib/zconf.h $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/include/zconf.h
+mkdir -p $DEST_DIR/lib
+cp $OUTPUT_DIR/*.a $DEST_DIR/lib
+mv $DEVENV/aiSDK/prebuilt/Web_wasm32_Debug/lib/libzlib.a $DEST_DIR/lib/libz.a
 
 mkdir -p $SKIA_DIR/include
 rsync -r --include="*/" --include="*.h" --exclude="*" $SRC_DIR/include $SKIA_DIR
@@ -57,3 +56,19 @@ rsync -r --include="*/" --include="*.h" --exclude="*" $SRC_DIR/src/core $SKIA_DI
 
 mkdir -p $SKIA_DIR/modules/skparagraph/include
 rsync -r --include="*/" --include="*.h" --exclude="*" $SRC_DIR/modules/skparagraph/include $SKIA_DIR/modules/skparagraph 
+
+# zlib
+mkdir -p $DEST_INCLUDE_DIR
+cp $THIRD_PARTY/externals/zlib/zlib.h $DEST_INCLUDE_DIR/zlib.h
+cp $THIRD_PARTY/externals/zlib/zconf.h $DEST_INCLUDE_DIR/zconf.h
+
+# libpng
+cp $THIRD_PARTY/externals/libpng/png.h $DEST_INCLUDE_DIR/png.h
+cp $THIRD_PARTY/externals/libpng/pngconf.h $DEST_INCLUDE_DIR/pngconf.h
+cp $THIRD_PARTY/libpng/pnglibconf.h $DEST_INCLUDE_DIR/pnglibconf.h
+
+# icu
+rsync -r --include="*/" --include="*.h" --exclude="*" $THIRD_PARTY/externals/icu/source/common/unicode $DEST_INCLUDE_DIR
+
+
+
