@@ -115,7 +115,7 @@ def git_repos_from_deps(ws = "@"):
     new_git_repository(
         name = "libpng",
         build_file = ws + "//bazel/external/libpng:BUILD.bazel",
-        commit = "07b8803110da160b158ebfef872627da6c85cbdf",
+        commit = "386707c6d19b974ca2e3db7f5c61873813c6fe44",
         remote = "https://skia.googlesource.com/third_party/libpng.git",
     )
 
