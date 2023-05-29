@@ -14,7 +14,7 @@ echo "DIR:$DIR"
 echo "OUTPUT_DIR:$OUTPUT_DIR"
 
 $DIR/../../bin/gn gen out/macOS_x64_Release --args='
-is_official_build = false 
+is_official_build = true 
 skia_use_system_icu = false 
 skia_use_system_harfbuzz = false 
 skia_use_system_zlib = false 
