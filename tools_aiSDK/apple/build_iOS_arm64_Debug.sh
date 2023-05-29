@@ -15,6 +15,7 @@ echo "OUTPUT_DIR:$OUTPUT_DIR"
 
 $DIR/../../bin/gn gen out/iOS_arm64_Debug --args='
 is_official_build = false 
+is_debug = true
 skia_use_system_icu = false 
 skia_use_system_harfbuzz = false 
 skia_use_system_zlib = false 
@@ -23,16 +24,16 @@ skia_use_system_libpng = false
 skia_use_system_libjpeg_turbo = false
 skia_use_system_expat = false
 skia_use_libwebp_encode = true
-skia_use_gl = true 
+skia_use_gl = false
 skia_enable_svg = true 
 skia_enable_pdf = false
-skia_use_metal = false
+skia_use_metal = true
 skia_use_direct3d = false 
 skia_enable_tools = false
 paragraph_tests_enabled = false 
 paragraph_gms_enabled = false 
 paragraph_bench_enabled = false 
-target_os = "iOS"
+target_os = "ios"
 ios_min_target = "12.0"
 '
 

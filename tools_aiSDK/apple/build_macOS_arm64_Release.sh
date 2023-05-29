@@ -15,6 +15,7 @@ echo "OUTPUT_DIR:$OUTPUT_DIR"
 
 $DIR/../../bin/gn gen out/macOS_arm64_Release --args='
 is_official_build = true 
+is_debug = false
 skia_use_system_icu = false 
 skia_use_system_harfbuzz = false 
 skia_use_system_zlib = false 
@@ -23,10 +24,10 @@ skia_use_system_libpng = false
 skia_use_system_libjpeg_turbo = false
 skia_use_system_expat = false
 skia_use_libwebp_encode = true
-skia_use_gl = true 
+skia_use_gl = false 
 skia_enable_svg = true 
 skia_enable_pdf = false
-skia_use_metal = false
+skia_use_metal = true
 skia_use_direct3d = false 
 skia_enable_tools = false
 paragraph_tests_enabled = false 
