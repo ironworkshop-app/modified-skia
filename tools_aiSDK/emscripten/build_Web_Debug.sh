@@ -61,6 +61,7 @@ rsync -r --include="*/" --include="*.h" --exclude="*" $SRC_DIR/modules/skparagra
 mkdir -p $DEST_INCLUDE_DIR
 cp $THIRD_PARTY/externals/zlib/zlib.h $DEST_INCLUDE_DIR/zlib.h
 cp $THIRD_PARTY/externals/zlib/zconf.h $DEST_INCLUDE_DIR/zconf.h
+cp $THIRD_PARTY/externals/zlib/chromeconf.h $DEST_INCLUDE_DIR/chromeconf.h
 
 # libpng
 cp $THIRD_PARTY/externals/libpng/png.h $DEST_INCLUDE_DIR/png.h
