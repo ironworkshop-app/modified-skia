@@ -57,6 +57,9 @@ rsync -r --include="*/" --include="*.h" --exclude="*" $SRC_DIR/src/core $SKIA_DI
 mkdir -p $SKIA_DIR/modules/skparagraph/include
 rsync -r --include="*/" --include="*.h" --exclude="*" $SRC_DIR/modules/skparagraph/include $SKIA_DIR/modules/skparagraph 
 
+mkdir -p $SKIA_DIR/modules/skcms 
+cp $SRC_DIR/modules/skcms/skcms.h $SKIA_DIR/modules/skcms/skcms.h
+
 # zlib
 mkdir -p $DEST_INCLUDE_DIR
 cp $THIRD_PARTY/externals/zlib/zlib.h $DEST_INCLUDE_DIR/zlib.h
