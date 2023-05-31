@@ -66,7 +66,7 @@ cp $THIRD_PARTY/externals/zlib/chromeconf.h $DEST_INCLUDE_DIR/chromeconf.h
 # libpng
 cp $THIRD_PARTY/externals/libpng/png.h $DEST_INCLUDE_DIR/png.h
 cp $THIRD_PARTY/externals/libpng/pngconf.h $DEST_INCLUDE_DIR/pngconf.h
-cp $THIRD_PARTY/libpng/pnglibconf.h $DEST_INCLUDE_DIR/pnglibconf.h
+cp $THIRD_PARTY/externals/libpng/scripts/pnglibconf.h.prebuilt $DEST_INCLUDE_DIR/pnglibconf.h
 
 # icu
 rsync -r --include="*/" --include="*.h" --exclude="*" $THIRD_PARTY/externals/icu/source/common/unicode $DEST_INCLUDE_DIR
