@@ -9,11 +9,12 @@ SKIA_DIR=$DEST_DIR/extra/skia
 THIRD_PARTY=$OUTPUT_DIR/../../third_party
 
 mkdir -p $OUTPUT_DIR
+mkdir -p $DEST_INCLUDE_DIR
 
 echo "DIR:$DIR"
 echo "OUTPUT_DIR:$OUTPUT_DIR"
 
-$DIR/../../bin/gn gen out/macOS_x64_Debug --args='
+$DIR/../../bin/gn gen $OUTPUT_DIR --args='
 is_official_build = false 
 is_debug = true
 skia_use_system_icu = false 
@@ -37,11 +38,11 @@ target_cpu = "x86_64"
 macos_min_target = "11.0"
 '
 
-ninja -C out/macOS_x64_Debug
+ninja -C $OUTPUT_DIR
 
 mkdir -p $DEST_DIR/lib
 cp $OUTPUT_DIR/*.a $DEST_DIR/lib
-mv $DEVENV/aiSDK/prebuilt/macOS_x64_Debug/lib/libzlib.a $DEST_DIR/lib/libz.a
+mv $DEST_DIR/lib/libzlib.a $DEST_DIR/lib/libz.a
 
 mkdir -p $SKIA_DIR/include
 rsync -r --include="*/" --include="*.h" --exclude="*" $SRC_DIR/include $SKIA_DIR
@@ -59,7 +60,6 @@ mkdir -p $SKIA_DIR/modules/skcms
 cp $SRC_DIR/modules/skcms/skcms.h $SKIA_DIR/modules/skcms/skcms.h
 
 # zlib
-mkdir -p $DEST_INCLUDE_DIR
 cp $THIRD_PARTY/externals/zlib/zlib.h $DEST_INCLUDE_DIR/zlib.h
 cp $THIRD_PARTY/externals/zlib/zconf.h $DEST_INCLUDE_DIR/zconf.h
 cp $THIRD_PARTY/externals/zlib/chromeconf.h $DEST_INCLUDE_DIR/chromeconf.h
