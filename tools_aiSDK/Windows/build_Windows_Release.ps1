@@ -35,21 +35,22 @@ Write-Output "OUTPUT_DIR:$OUTPUT_DIR"
     paragraph_tests_enabled = false 
     paragraph_gms_enabled = false 
     paragraph_bench_enabled = false 
+    extra_cflags=[\"/MD\"]
     target_cpu = \"x64\"
     cc = \"clang\"
     cxx = \"clang++\"
-    clang_win = \"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\Llvm\"
+    clang_win = \"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\Llvm\x64\"
 '
 
 ninja -C $OUTPUT_DIR
 
-robocopy /xc /xn /xo "$OUTPUT_DIR" "$DEST_DIR\lib" *.lib
+robocopy /xo "$OUTPUT_DIR" "$DEST_DIR\lib" *.lib
 Move-Item -force "$DEST_DIR\lib\zlib.lib" "$DEST_DIR\lib\z.lib"
 
-robocopy /xc /xn /xo /MIR "$SRC_DIR\include" "$SKIA_DIR\include" *.h
-robocopy /xc /xn /xo /MIR "$SRC_DIR\src\base" "$SKIA_DIR\src\base" *.h
-robocopy /xc /xn /xo /MIR "$SRC_DIR\src\core" "$SKIA_DIR\src\core" *.h
-robocopy /xc /xn /xo /MIR "$SRC_DIR\modules\skparagraph\include" "$SKIA_DIR\modules\skparagraph\include" *.h
+robocopy /xo /MIR "$SRC_DIR\include" "$SKIA_DIR\include" *.h
+robocopy /xo /MIR "$SRC_DIR\src\base" "$SKIA_DIR\src\base" *.h
+robocopy /xo /MIR "$SRC_DIR\src\core" "$SKIA_DIR\src\core" *.h
+robocopy /xo /MIR "$SRC_DIR\modules\skparagraph\include" "$SKIA_DIR\modules\skparagraph\include" *.h
 
 mkdir -Force "$SKIA_DIR\modules\skcms" | Out-Null
 Copy-Item "$SRC_DIR\modules\skcms\skcms.h" "$SKIA_DIR\modules\skcms\skcms.h"
@@ -65,6 +66,6 @@ Copy-Item $THIRD_PARTY\externals\libpng\pngconf.h $DEST_INCLUDE_DIR\pngconf.h
 Copy-Item $THIRD_PARTY\externals\libpng\scripts/pnglibconf.h.prebuilt $DEST_INCLUDE_DIR\pnglibconf.h
 
 # icu
-robocopy /xc /xn /xo /MIR "$THIRD_PARTY\externals\icu\source\common\unicode" "$DEST_INCLUDE_DIR\unicode" *.h
+robocopy /xo /MIR "$THIRD_PARTY\externals\icu\source\common\unicode" "$DEST_INCLUDE_DIR\unicode" *.h
 
 
