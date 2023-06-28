@@ -37,9 +37,6 @@ Write-Output "OUTPUT_DIR:$OUTPUT_DIR"
     paragraph_bench_enabled = false 
     extra_cflags=[\"/MD\"]
     target_cpu = \"x64\"
-    cc = \"clang\"
-    cxx = \"clang++\"
-    clang_win = \"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\Llvm\x64\"
 '
 
 ninja -C $OUTPUT_DIR

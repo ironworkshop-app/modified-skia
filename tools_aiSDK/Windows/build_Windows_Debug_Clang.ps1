@@ -1,9 +1,14 @@
+# ===============================================================
+# 注意：（慎重使用）
+# 至Clang17为止，编译出来的二进制与MSVC并不完全兼容，运行崩溃。
+# ===============================================================
+
 $DIR = $PSScriptRoot
 $DEVENV = $env:DEVENV
 
 $SRC_DIR = "$DIR\..\.."
 $GN = "$SRC_DIR\bin\gn.exe"
-$OUTPUT_DIR = "$SRC_DIR\out\Windows_x64_Debug"
+$OUTPUT_DIR = "$SRC_DIR\out\Windows_x64_Debug_Clang"
 $DEST_DIR="$DEVENV\aiSDK\prebuilt\Windows_x64_Debug"
 $DEST_INCLUDE_DIR="$DEST_DIR\include"
 $SKIA_DIR="$DEST_DIR\extra\skia"
@@ -37,6 +42,9 @@ Write-Output "OUTPUT_DIR:$OUTPUT_DIR"
     paragraph_bench_enabled = false 
     extra_cflags=[\"/MDd\"]
     target_cpu = \"x64\"
+    cc = \"clang\"
+    cxx = \"clang++\"
+    clang_win = \"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\Llvm\x64\"
 '
 
 ninja -C $OUTPUT_DIR

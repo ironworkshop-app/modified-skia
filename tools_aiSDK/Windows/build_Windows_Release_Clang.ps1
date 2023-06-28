@@ -1,10 +1,15 @@
+# ===============================================================
+# 注意：（慎重使用）
+# 至Clang17为止，编译出来的二进制与MSVC并不完全兼容，运行崩溃。
+# ===============================================================
+
 $DIR = $PSScriptRoot
 $DEVENV = $env:DEVENV
 
 $SRC_DIR = "$DIR\..\.."
 $GN = "$SRC_DIR\bin\gn.exe"
-$OUTPUT_DIR = "$SRC_DIR\out\Windows_x64_Debug"
-$DEST_DIR="$DEVENV\aiSDK\prebuilt\Windows_x64_Debug"
+$OUTPUT_DIR = "$SRC_DIR\out\Windows_x64_Release_Clang"
+$DEST_DIR="$DEVENV\aiSDK\prebuilt\Windows_x64_Release"
 $DEST_INCLUDE_DIR="$DEST_DIR\include"
 $SKIA_DIR="$DEST_DIR\extra\skia"
 $THIRD_PARTY="$OUTPUT_DIR\..\..\third_party"
@@ -16,8 +21,8 @@ Write-Output "DIR:$DIR"
 Write-Output "OUTPUT_DIR:$OUTPUT_DIR"
 
 & $GN gen $OUTPUT_DIR --args='
-    is_official_build = false 
-    is_debug = true
+    is_official_build = true 
+    is_debug = false
     skia_use_system_icu = false 
     skia_use_system_harfbuzz = false 
     skia_use_system_zlib = false 
@@ -35,8 +40,11 @@ Write-Output "OUTPUT_DIR:$OUTPUT_DIR"
     paragraph_tests_enabled = false 
     paragraph_gms_enabled = false 
     paragraph_bench_enabled = false 
-    extra_cflags=[\"/MDd\"]
+    extra_cflags=[\"/MD\"]
     target_cpu = \"x64\"
+    cc = \"clang\"
+    cxx = \"clang++\"
+    clang_win = \"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\Llvm\x64\"
 '
 
 ninja -C $OUTPUT_DIR
