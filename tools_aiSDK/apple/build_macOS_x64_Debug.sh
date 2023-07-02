@@ -42,6 +42,7 @@ ninja -C $OUTPUT_DIR
 
 mkdir -p $DEST_DIR/lib
 cp $OUTPUT_DIR/*.a $DEST_DIR/lib
+cp $OUTPUT_DIR/icudtl.dat $DEST_DIR/lib
 mv $DEST_DIR/lib/libzlib.a $DEST_DIR/lib/libz.a
 
 mkdir -p $SKIA_DIR/include

@@ -41,7 +41,7 @@ Write-Output "OUTPUT_DIR:$OUTPUT_DIR"
 
 ninja -C $OUTPUT_DIR
 
-robocopy /xo "$OUTPUT_DIR" "$DEST_DIR\lib" *.lib
+robocopy /xo "$OUTPUT_DIR" "$DEST_DIR\lib" *.lib icudtl.dat
 Move-Item -force "$DEST_DIR\lib\zlib.lib" "$DEST_DIR\lib\z.lib"
 
 robocopy /xo /MIR "$SRC_DIR\include" "$SKIA_DIR\include" *.h

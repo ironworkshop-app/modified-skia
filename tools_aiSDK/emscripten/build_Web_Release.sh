@@ -42,6 +42,7 @@ ninja -C out/Web_wasm32_Release
 
 mkdir -p $DEST_DIR/lib
 cp $OUTPUT_DIR/*.a $DEST_DIR/lib
+cp $OUTPUT_DIR/icudtl.dat $DEST_DIR/lib
 mv $DEVENV/aiSDK/prebuilt/Web_wasm32_Release/lib/libzlib.a $DEST_DIR/lib/libz.a
 
 mkdir -p $SKIA_DIR/include
