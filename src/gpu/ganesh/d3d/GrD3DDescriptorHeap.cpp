@@ -22,16 +22,22 @@ std::unique_ptr<GrD3DDescriptorHeap> GrD3DDescriptorHeap::Make(GrD3DGpu* gpu,
 
     return std::unique_ptr<GrD3DDescriptorHeap>(
             new GrD3DDescriptorHeap(std::move(gr_cp<ID3D12DescriptorHeap>(heap)),
-                                    gpu->device()->GetDescriptorHandleIncrementSize(type)));
+                                    gpu->device()->GetDescriptorHandleIncrementSize(type),
+                                    (bool)(flags & D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE)));
 }
 
 GrD3DDescriptorHeap::GrD3DDescriptorHeap(const gr_cp<ID3D12DescriptorHeap>& heap,
-                                         unsigned int handleIncrementSize)
+                                         unsigned int handleIncrementSize,
+                                         bool shaderVisible)
     : fHeap(heap)
+    , fShaderVisible(shaderVisible)
     , fHandleIncrementSize(handleIncrementSize)
     , fUniqueID(GenID()) {
     fCPUHeapStart = fHeap->GetCPUDescriptorHandleForHeapStart();
-    fGPUHeapStart = fHeap->GetGPUDescriptorHandleForHeapStart();
+
+    if (shaderVisible) {
+        fGPUHeapStart = fHeap->GetGPUDescriptorHandleForHeapStart();
+    }
 }
 
 GrD3DDescriptorHeap::CPUHandle GrD3DDescriptorHeap::getCPUHandle(unsigned int index) {
@@ -43,6 +49,8 @@ GrD3DDescriptorHeap::CPUHandle GrD3DDescriptorHeap::getCPUHandle(unsigned int in
 
 GrD3DDescriptorHeap::GPUHandle GrD3DDescriptorHeap::getGPUHandle(unsigned int index) {
     SkASSERT(index < fHeap->GetDesc().NumDescriptors);
+    SkASSERT(fShaderVisible);
+
     D3D12_GPU_DESCRIPTOR_HANDLE handle = fGPUHeapStart;
     handle.ptr += index * fHandleIncrementSize;
     return {handle, fUniqueID};

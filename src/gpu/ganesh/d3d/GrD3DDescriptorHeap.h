@@ -56,7 +56,9 @@ public:
     }
 
 protected:
-    GrD3DDescriptorHeap(const gr_cp<ID3D12DescriptorHeap>&, unsigned int handleIncrementSize);
+    GrD3DDescriptorHeap(const gr_cp<ID3D12DescriptorHeap>&, 
+                        unsigned int handleIncrementSize,
+                        bool shaderVisible);
 
     static uint32_t GenID() {
         static std::atomic<uint32_t> nextID{1};
@@ -72,6 +74,7 @@ protected:
     D3D12_CPU_DESCRIPTOR_HANDLE fCPUHeapStart;
     D3D12_GPU_DESCRIPTOR_HANDLE fGPUHeapStart;
     uint32_t fUniqueID;
+    bool fShaderVisible;
 };
 
 #endif
